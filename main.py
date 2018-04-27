@@ -1,11 +1,15 @@
 import requests
+import misc
+import json
 from time import sleep
 
-url = "https://api.telegram.org/bot550506408:AAFS8jAyuapzVFsrlB9Gu1TWGO6T0BPFS4c/"
+token = misc.token
+
+url = 'https://api.telegram.org/bot' + token + '/'
 
 proxies = {
-    'http': 'socks5://telegram:telegram@ottgm.tgproxy.me:1080',
-    'https': 'socks5://telegram:telegram@ottgm.tgproxy.me:1080'
+    'http': 'socks5://telegram:telegram@mxajf.tgproxy.me:1080',
+    'https': 'socks5://telegram:telegram@mxajf.tgproxy.me:1080'
 }
 
 
@@ -20,13 +24,20 @@ def get_updates_json(request):
 
 def last_update(data):  
     results = data['result']
-    total_updates = len(results) - 1
-    return results[total_updates]
+    return results[-1]
 
-def get_chat_id(update):
+
+def get_message(update):
+
     chat_id = update['message']['chat']['id']
-    print(chat_id)
-    return chat_id
+    message_text = update['message']['text']
+
+    message = {
+        'chat_id': chat_id,
+        'text': message_text
+    }
+
+    return message
 
 def send_message(chat, text):
     params = {
@@ -34,16 +45,23 @@ def send_message(chat, text):
         'text': text
     }
     response = requests.post(url + 'sendMessage', data=params, proxies=proxies)
-    print(response)
     return response
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
-    while True:
-        if update_id == last_update(get_updates_json(url))['update_id']:
-            send_message(get_chat_id(last_update(get_updates_json(url))), 'а у меня скрипты снова обновились бебебе')
-            update_id += 1
-        sleep(1)
+
+    answer = get_message(last_update(get_updates_json(url)))
+
+    chat_id = answer['chat_id']
+    text = answer['text']
+
+    send_message(chat_id, 'Проверим)')
+
+    # while True:
+    #     if update_id == last_update(get_updates_json(url))['update_id']:
+    #         send_message(get_chat_id(last_update(get_updates_json(url))), 'а у меня скрипты снова обновились бебебе')
+    #         update_id += 1
+    #     sleep(1)
 
 if __name__ == '__main__':
     main()
