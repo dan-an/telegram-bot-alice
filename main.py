@@ -50,18 +50,17 @@ def send_message(chat, text):
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
 
-    answer = get_message(last_update(get_updates_json(url)))
+    while True:
+        if update_id == last_update(get_updates_json(url))['update_id']:
 
-    chat_id = answer['chat_id']
-    text = answer['text']
+            answer = get_message(last_update(get_updates_json(url)))
 
-    send_message(chat_id, 'Проверим)')
+            chat_id = answer['chat_id']
+            text = answer['text']
 
-    # while True:
-    #     if update_id == last_update(get_updates_json(url))['update_id']:
-    #         send_message(get_chat_id(last_update(get_updates_json(url))), 'а у меня скрипты снова обновились бебебе')
-    #         update_id += 1
-    #     sleep(1)
+            send_message(chat_id, 'Ты написал: "' + text + '"')
+            update_id += 1
+        sleep(1)
 
 if __name__ == '__main__':
     main()
