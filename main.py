@@ -2,10 +2,13 @@ import requests
 import misc
 import json
 from time import sleep
+from trello import main as save_film
 
-token = misc.token
+telegram_token = misc.token['telegram']
 
-url = 'https://api.telegram.org/bot' + token + '/'
+bot_name = misc.bot_name['telegram']
+
+url = 'https://api.telegram.org/bot' + telegram_token + '/'
 
 proxies = {
     'http': 'socks5://telegram:telegram@mxajf.tgproxy.me:1080',
@@ -56,11 +59,17 @@ def main():
             answer = get_message(last_update(get_updates_json(url)))
 
             chat_id = answer['chat_id']
-            text = answer['text']
 
-            send_message(chat_id, 'Ты написал: "' + text + '"')
+            if answer['text'].startswith(bot_name):
+                if answer['text'].find('запомни фильм') != -1:
+                    save_film(answer['text'].replace(bot_name + ' запомни фильм', ' ').lstrip())
+                    send_message(chat_id, 'Запомнила!')
+                else:
+                    text = answer['text']
+                    send_message(chat_id, 'Ты написал: "' + text + '"')
+
             update_id += 1
-        sleep(1)
+        sleep(3)
 
 if __name__ == '__main__':
     main()
