@@ -11,21 +11,21 @@ bot_name = misc.bot_name['telegram']
 url = 'https://api.telegram.org/bot' + telegram_token + '/'
 
 proxies = {
-    'http': 'socks5://telegram:telegram@mxajf.tgproxy.me:1080',
-    'https': 'socks5://telegram:telegram@mxajf.tgproxy.me:1080'
+    'http': 'socks5://telegram:telegram@xznjl.teletype.live:1080',
+    'https': 'socks5://telegram:telegram@xznjl.teletype.live:1080'
 }
-
 
 def get_updates_json(request):
     params = {
         'timeout': 100,
         'offset': None
     }
-    response = requests.get(request + 'getUpdates', data=params, proxies=proxies)
+    response = requests.get(request + 'getUpdates', data=params)
+    print(response)
     return response.json()
 
 
-def last_update(data):  
+def last_update(data):
     results = data['result']
     return results[-1]
 
@@ -47,7 +47,7 @@ def send_message(chat, text):
         'chat_id': chat,
         'text': text
     }
-    response = requests.post(url + 'sendMessage', data=params, proxies=proxies)
+    response = requests.post(url + 'sendMessage', data=params)
     return response
 
 def main():
@@ -60,13 +60,15 @@ def main():
 
             chat_id = answer['chat_id']
 
-            if answer['text'].startswith(bot_name):
+            if answer['text'].startswith(bot_name) or answer['text'].startswith('/') :
                 if answer['text'].find('запомни фильм') != -1:
-                    save_film(answer['text'].replace(bot_name + ' запомни фильм', ' ').lstrip())
-                    send_message(chat_id, 'Запомнила!')
+                    send_message(chat_id, 'Диктуй!')
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
+            if answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and answer['reply_to_message']['text'] == "Диктуй!":
+                save_film(answer['text'])
+                send_message(chat_id, "Запомнила!")
 
             update_id += 1
         sleep(3)
