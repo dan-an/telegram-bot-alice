@@ -21,7 +21,10 @@ def get_updates_json(request):
         'offset': None
     }
     response = requests.get(request + 'getUpdates', data=params)
-    print(response)
+    
+    # with open('updates.json', 'w') as file:
+    #     json.dump(response.json(), file, indent=2, ensure_ascii=False)
+
     return response.json()
 
 
@@ -33,11 +36,13 @@ def last_update(data):
 def get_message(update):
 
     chat_id = update['message']['chat']['id']
-    message_text = update['message']['text']
+    message_text = update['message']['text'].lower()
+    reply = update['message']['reply_to_message']
 
     message = {
         'chat_id': chat_id,
-        'text': message_text
+        'text': message_text,
+        'reply_to_message': reply
     }
 
     return message
@@ -66,9 +71,11 @@ def main():
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
-            if answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and answer['reply_to_message']['text'] == "Диктуй!":
-                save_film(answer['text'])
+            elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and answer['reply_to_message']['text'] == "Диктуй!":
+                save_film(answer['text'].capitalize())
                 send_message(chat_id, "Запомнила!")
+            else:
+                continue
 
             update_id += 1
         sleep(3)

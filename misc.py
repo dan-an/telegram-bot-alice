@@ -8,5 +8,5 @@ api_key = {
 }
 
 bot_name = {
-  'telegram': '@AliceDanBot'
+  'telegram': '@alicedanbot'
 }
