@@ -13,33 +13,59 @@ params = {
   'token': trello_token
 }
 
-board_name = "Для бота"
+class Board():
+  def __init__(self, name):
+    self.board_name = name
+    self.id = None
+    self.lists = None
+    
+  def get_bot_board(self, url, params):
+    response = requests.get(url + 'members/me/boards', params=params)
+    board_list = response.json()
+    bot_board = next(board for board in board_list if board['name'] == self.board_name)
+    self.id = bot_board['id']
+    return bot_board
 
-def trello_get_boards(url, params):
-  response = requests.get(url + 'members/me/boards', params=params)
-  return response.json()
+  def get_board_lists(self, url, params):
+    response = requests.get(url + 'boards/' + self.id + '/lists', params=params)
+    self.lists = response.json()
+    return response.json()
 
-def get_bot_board(board_list, board_name):
-  return next(board for board in board_list if board['name'] == board_name)
+class List():
+  def __init__(self, board_lists, list_name):
+    self.name = list_name
+    self.id = next(list for list in board_lists if list['name'] == self.name)['id']
 
-def get_board_lists(url, params, board_id):
-  response = requests.get(url + 'boards/' + board_id + '/lists', params=params)
-  return response.json()
+class Card():
+  def __init__(self, name, description):
+    self.name = name
+    self.description = description
+    # self.labels = labels
+  
+  def post_card(self, url, params, list_id):
+    params['idList'] = list_id
+    params['name'] = self.name
+    params['desc'] = self.description
+    # params['idLabels'] = self.labels
 
-def create_card(url, params, list_id, card_name):
-  params['idList'] = list_id
-  params['name'] = card_name
+    requests.post(url + '/cards', params=params)
 
-  requests.post(url + '/cards', params=params)
+# def main():
+#   bot_board = Board('Для бота')
 
-def main(card_name):
+#   bot_board.get_bot_board(url, params)
 
-  existing_trello_boards = trello_get_boards(url, params)
+#   bot_board.get_board_lists(url, params)
 
-  bot_board = get_bot_board(existing_trello_boards, board_name)
+#   target_list = List(bot_board.get_board_lists(url, params), 'Посмотрели')
 
-  board_lists = get_board_lists(url, params, bot_board['id'])
+#   print(target_list.id)
+#   print(target_list.name)
 
-  target_list = next(list for list in board_lists if list['name'] == 'Не смотрели')
 
-  create_card(url, params, target_list['id'], card_name)
+
+#   # test_card = Card('тест')
+
+#   # test_card.post_card(url, params, target_list.id)
+
+# main()

@@ -2,7 +2,8 @@ import requests
 import misc
 import json
 from time import sleep
-from trello import main as save_film
+import trello
+import films
 
 telegram_token = misc.token['telegram']
 
@@ -11,8 +12,8 @@ bot_name = misc.bot_name['telegram']
 url = 'https://api.telegram.org/bot' + telegram_token + '/'
 
 proxies = {
-    'http': 'socks5://telegram:telegram@xznjl.teletype.live:1080',
-    'https': 'socks5://telegram:telegram@xznjl.teletype.live:1080'
+    'http': 'socks5://telegram:telegram@linch.teletype.live:1080',
+    'https': 'socks5://telegram:telegram@linch.teletype.live:1080'
 }
 
 def get_updates_json(request):
@@ -20,7 +21,7 @@ def get_updates_json(request):
         'timeout': 100,
         'offset': None
     }
-    response = requests.get(request + 'getUpdates', data=params)
+    response = requests.get(request + 'getUpdates', data=params, proxies=proxies)
     
     # with open('updates.json', 'w') as file:
     #     json.dump(response.json(), file, indent=2, ensure_ascii=False)
@@ -55,6 +56,14 @@ def send_message(chat, text):
     response = requests.post(url + 'sendMessage', data=params)
     return response
 
+def save_film(list_name, film_name):
+    movie = films.Film(film_name)
+    movie.get_movie_content()
+    board = trello.Board('Для бота')
+    list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
+    card = trello.Card(film_name, movie.plot)
+    card.post_card(trello.url, trello.params, list.id)
+ 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
 
@@ -72,7 +81,7 @@ def main():
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and answer['reply_to_message']['text'] == "Диктуй!":
-                save_film(answer['text'].capitalize())
+                save_film('Не смотрели', answer['text'].capitalize())
                 send_message(chat_id, "Запомнила!")
             else:
                 continue
