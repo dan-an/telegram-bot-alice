@@ -9,7 +9,7 @@ proxies = {
 
 
 try:
-    response = requests.get(url) 
+    response = requests.get(url, proxies=proxies) 
     print(response.json())
 except requests.exceptions.ConnectionError:
     response.status_code = "Connection refused"

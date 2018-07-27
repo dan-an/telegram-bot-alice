@@ -12,8 +12,8 @@ bot_name = misc.bot_name['telegram']
 url = 'https://api.telegram.org/bot' + telegram_token + '/'
 
 proxies = {
-    'http': 'socks5://telegram:telegram@linch.teletype.live:1080',
-    'https': 'socks5://telegram:telegram@linch.teletype.live:1080'
+    'http': 'socks5://telega:nNcl1BFJOG0@v1.gpform.pro:31080',
+    'https': 'socks5://telega:nNcl1BFJOG0@v1.gpform.pro:31080'
 }
 
 def get_updates_json(request):
