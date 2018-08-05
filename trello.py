@@ -18,6 +18,7 @@ class Board():
     self.board_name = name
     self.id = None
     self.lists = None
+    self.get_bot_board(url, params)
     
   def get_bot_board(self, url, params):
     response = requests.get(url + 'members/me/boards', params=params)

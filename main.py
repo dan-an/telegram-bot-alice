@@ -38,7 +38,7 @@ def get_message(update):
 
     chat_id = update['message']['chat']['id']
     message_text = update['message']['text'].lower()
-    reply = update['message']['reply_to_message'] if update['message']['reply_to_message'] else None
+    reply = update['message'].get('reply_to_message', None)
 
     message = {
         'chat_id': chat_id,
