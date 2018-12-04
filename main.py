@@ -3,7 +3,7 @@ import misc
 import json
 from time import sleep
 import trello
-import films
+# import films
 
 telegram_token = misc.token['telegram']
 
