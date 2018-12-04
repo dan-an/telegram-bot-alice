@@ -1,4 +1,4 @@
-from kinopoiskpy.movie import Movie
+from kinopoisk.movie import Movie
 
 class Film():
   def __init__(self, name):
