@@ -8,7 +8,9 @@ class Film():
     self.genres = None
 
   def search_film(self):
+    print(self.name)
     movie_list = Movie.objects.search(self.name)
+    print(movie_list)
     self.id = movie_list[0].id
 
   def get_movie_content(self):
