@@ -21,7 +21,7 @@ def get_updates_json(request):
         'timeout': 100,
         'offset': None
     }
-    response = requests.get(request + 'getUpdates', data=params, proxies=proxies)
+    response = requests.get(request + 'getUpdates', data=params)
     
     # with open('updates.json', 'w') as file:
     #     json.dump(response.json(), file, indent=2, ensure_ascii=False)
