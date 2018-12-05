@@ -56,12 +56,20 @@ def send_message(chat, text):
     response = requests.post(url + 'sendMessage', data=params)
     return response
 
+
+# TODO look for API
+# def save_film(list_name, film_name):
+#     movie = films.Film(film_name)
+#     movie.get_movie_content()
+#     board = trello.Board('Для бота')
+#     list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
+#     card = trello.Card(film_name, movie.plot)
+#     card.post_card(trello.url, trello.params, list.id)
+
 def save_film(list_name, film_name):
-    movie = films.Film(film_name)
-    movie.get_movie_content()
     board = trello.Board('Для бота')
     list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
-    card = trello.Card(film_name, movie.plot)
+    card = trello.Card(film_name)
     card.post_card(trello.url, trello.params, list.id)
  
 def main():
