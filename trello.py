@@ -38,15 +38,15 @@ class List():
     self.id = next(list for list in board_lists if list['name'] == self.name)['id']
 
 class Card():
-  def __init__(self, name, description):
+  def __init__(self, name):
     self.name = name
-    self.description = description
+    # self.description = description
     # self.labels = labels
   
   def post_card(self, url, params, list_id):
     params['idList'] = list_id
     params['name'] = self.name
-    params['desc'] = self.description
+    # params['desc'] = self.description
     # params['idLabels'] = self.labels
 
     requests.post(url + '/cards', params=params)
