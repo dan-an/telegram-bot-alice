@@ -18,6 +18,7 @@ class Board():
     self.board_name = name
     self.id = None
     self.lists = None
+    self.labels = None
     self.get_bot_board(url, params)
     
   def get_bot_board(self, url, params):
@@ -25,6 +26,9 @@ class Board():
     board_list = response.json()
     bot_board = next(board for board in board_list if board['name'] == self.board_name)
     self.id = bot_board['id']
+    raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
+    self.labels = [label for label in raw_labels if label['name'] != '']
+    print(self.labels)
     return bot_board
 
   def get_board_lists(self, url, params):
@@ -32,22 +36,31 @@ class Board():
     self.lists = response.json()
     return response.json()
 
+  def create_label(self, url, params, label_name):
+    query = {
+        'name': label_name,
+        'color': None,
+        'idBoard': self.id,
+    }
+    response = requests.post(f'{url}labels/', params={**query, **params})
+    return response.json()['id']
+
 class List():
   def __init__(self, board_lists, list_name):
     self.name = list_name
     self.id = next(list for list in board_lists if list['name'] == self.name)['id']
 
 class Card():
-  def __init__(self, name):
+  def __init__(self, name, description, labels):
     self.name = name
-    # self.description = description
-    # self.labels = labels
+    self.description = description
+    self.labels = labels
   
-  def post_card(self, url, params, list_id):
+  def post_card(self, url, params, list_id, labels):
     params['idList'] = list_id
     params['name'] = self.name
-    # params['desc'] = self.description
-    # params['idLabels'] = self.labels
+    params['desc'] = self.description
+    params['idLabels'] = ','.join(labels)
 
     requests.post(url + '/cards', params=params)
 

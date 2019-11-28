@@ -56,21 +56,25 @@ def send_message(chat, text):
     response = requests.post(url + 'sendMessage', data=params)
     return response
 
-
-# TODO look for API
-# def save_film(list_name, film_name):
-#     movie = films.Film(film_name)
-#     movie.get_movie_content()
-#     board = trello.Board('Для бота')
-#     list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
-#     card = trello.Card(film_name, movie.plot)
-#     card.post_card(trello.url, trello.params, list.id)
-
 def save_film(list_name, film_name):
+    movie = films.Film(film_name)
+    movie.get_movie_content()
     board = trello.Board('Для бота')
     list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
-    card = trello.Card(film_name)
-    card.post_card(trello.url, trello.params, list.id)
+    card = trello.Card(film_name, movie.plot)
+    labels_list = []
+
+
+
+    for genre in movie.genres:
+        if not any(label['name'] == genre for label in board.labels):
+            labels_list.append(board.create_label(trello.url, trello.params, genre))
+        else:
+            for label in board.labels:
+                if label['name'] == genre:
+                    labels_list.append(label['id'])
+
+    card.post_card(trello.url, trello.params, list.id, labels_list)
  
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
@@ -91,8 +95,6 @@ def main():
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and answer['reply_to_message']['text'] == "Диктуй!":
                 save_film('Не смотрели', answer['text'].capitalize())
                 send_message(chat_id, "Запомнила!")
-            else:
-                continue
 
             update_id += 1
         sleep(3)
