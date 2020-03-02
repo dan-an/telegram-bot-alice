@@ -59,8 +59,9 @@ def save_film(list_name, film_name):
     movie = films.Film(film_name)
     movie.get_movie_content()
     board = trello.Board('Для бота')
+    name = f'{film_name} (KP - {movie.rating})'
     list = trello.List(board.get_board_lists(trello.url, trello.params), list_name)
-    card = trello.Card(f'{film_name} (KP - {movie.rating}, IMDB - {movie.imdb})', movie.plot)
+    card = trello.Card(name, movie.plot)
     labels_list = []
 
     for genre in movie.genres:
