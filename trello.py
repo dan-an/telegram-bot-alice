@@ -34,7 +34,7 @@ class Board():
     self.lists = response.json()
     return response.json()
 
-  def create_label(self, url, params, label_name):
+  def create_label(self, label_name):
     query = {
         'name': label_name,
         'color': None,

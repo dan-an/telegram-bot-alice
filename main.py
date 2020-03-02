@@ -67,7 +67,7 @@ def save_film(list_name, film_name):
     for genre in movie.genres:
         print(genre)
         if not any(label['name'] == genre for label in board.labels):
-            labels_list.append(board.create_label(trello.url, trello.params, genre))
+            labels_list.append(board.create_label(genre))
         else:
             for label in board.labels:
                 print('in main', label)
