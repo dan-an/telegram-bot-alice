@@ -28,7 +28,6 @@ class Board():
     self.id = bot_board['id']
     raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
     self.labels = [label for label in raw_labels if label['name'] != '']
-    print(self.labels)
     return bot_board
 
   def get_board_lists(self, url, params):
