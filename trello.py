@@ -20,7 +20,7 @@ class Board():
     self.lists = None
     self.labels = None
     self.get_bot_board(url, params)
-    
+
   def get_bot_board(self, url, params):
     response = requests.get(url + 'members/me/boards', params=params)
     board_list = response.json()
@@ -51,11 +51,10 @@ class List():
     self.id = next(list for list in board_lists if list['name'] == self.name)['id']
 
 class Card():
-  def __init__(self, name, description, labels):
+  def __init__(self, name, description):
     self.name = name
     self.description = description
-    self.labels = labels
-  
+
   def post_card(self, url, params, list_id, labels):
     params['idList'] = list_id
     params['name'] = self.name
