@@ -22,9 +22,6 @@ def get_updates_json(request):
         'offset': None
     }
     response = requests.get(request + 'getUpdates', data=params)
-    
-    # with open('updates.json', 'w') as file:
-    #     json.dump(response.json(), file, indent=2, ensure_ascii=False)
 
     return response.json()
 
@@ -75,7 +72,7 @@ def save_film(list_name, film_name):
                     labels_list.append(label['id'])
 
     card.post_card(trello.url, trello.params, list.id, labels_list)
- 
+
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
 
