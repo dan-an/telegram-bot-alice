@@ -64,6 +64,7 @@ class Card():
     params['name'] = self.name
     params['desc'] = self.description
     params['idLabels'] = ','.join(labels)
+    print('post_card labels', labels)
 
     requests.post(url + '/cards', params=params)
 
