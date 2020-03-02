@@ -26,8 +26,7 @@ class Board():
     board_list = response.json()
     bot_board = next(board for board in board_list if board['name'] == self.board_name)
     self.id = bot_board['id']
-    raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
-    self.labels = [label for label in raw_labels if label['name'] != '']
+    self.get_labels(url, params)
     return bot_board
 
   def get_board_lists(self, url, params):
@@ -43,7 +42,12 @@ class Board():
     }
     print('label create', query)
     response = requests.post(f'{url}labels/', params={**query, **params})
+    self.get_labels(url, params)
     return response.json()['id']
+
+  def get_labels(self, url, params):
+    raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
+    self.labels = [label for label in raw_labels if label['name'] != '']
 
 class List():
   def __init__(self, board_lists, list_name):
