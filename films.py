@@ -16,5 +16,6 @@ class Film():
   def get_movie_content(self):
     movie = Movie(self.id)
     movie.get_content('main_page')
+    print(movie)
     self.plot = movie.plot
     self.genres = movie.genres
