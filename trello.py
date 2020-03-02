@@ -40,7 +40,7 @@ class Board():
         'color': None,
         'idBoard': self.id,
     }
-    print('label create', query)
+    print('label create', {**query, **params})
     response = requests.post(f'{url}labels/', params={**query, **params})
     self.get_labels(url, params)
     print('response.json()', response.json())
