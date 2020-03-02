@@ -16,6 +16,7 @@ class Film():
   def get_movie_content(self):
     movie = Movie(self.id)
     movie.get_content('main_page')
+    print(movie.imdb_rating)
     self.plot = movie.plot
     self.genres = movie.genres
     self.rating = movie.rating
