@@ -65,22 +65,19 @@ def save_film(list_name, film_name):
     labels_list = []
 
     for genre in movie.genres:
-        print(genre)
         if not any(label['name'] == genre for label in board.labels):
             labels_list.append(board.create_label(genre))
         else:
             for label in board.labels:
-                print('in main', label)
                 if label['name'] == genre:
                     labels_list.append(label['id'])
-
-    print('labels_list', labels_list)
 
     card.post_card(list.id, labels_list)
 
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
+    board = trello.Board('Для бота')
 
     while True:
         if update_id == last_update(get_updates_json(url))['update_id']:
@@ -97,8 +94,12 @@ def main():
                     send_message(chat_id, 'Ты написал: "' + text + '"')
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and \
                     answer['reply_to_message']['text'] == "Диктуй!":
-                save_film('Не смотрели', answer['text'].capitalize())
-                send_message(chat_id, "Запомнила!")
+                film_name = answer['text'].capitalize()
+                if any(card.name.find(film_name) for card in board.get_board_cards()):
+                    send_message(chat_id, "Такой уже есть")
+                else:
+                    save_film('Не смотрели', film_name)
+                    send_message(chat_id, "Запомнила!")
 
             update_id += 1
         sleep(3)

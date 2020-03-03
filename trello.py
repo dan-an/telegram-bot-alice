@@ -18,6 +18,7 @@ class Board:
         self.board_name = name
         self.id = None
         self.lists = None
+        self.cards = None
         self.labels = None
         self.get_bot_board()
 
@@ -34,6 +35,15 @@ class Board:
         self.lists = response.json()
         return response.json()
 
+    def get_board_cards(self):
+        response = requests.get(url + 'boards/' + self.id + '/cards', params=params)
+        self.lists = response.json()
+        return response.json()
+
+    def get_labels(self):
+        raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
+        self.labels = [label for label in raw_labels if label['name'] != '']
+
     def create_label(self, label_name):
         query = {
             'name': label_name,
@@ -44,10 +54,6 @@ class Board:
         response = requests.post(f'{url}labels/', params={**query, **params})
         self.get_labels()
         return response.json()['id']
-
-    def get_labels(self):
-        raw_labels = requests.get(f'{url}/boards/{self.id}/labels/', params=params).json()
-        self.labels = [label for label in raw_labels if label['name'] != '']
 
 
 class List:
