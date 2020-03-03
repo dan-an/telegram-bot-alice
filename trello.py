@@ -76,4 +76,16 @@ class Card:
             'idLabels': ','.join(labels)
         }
 
-        requests.post(url + '/cards', params=query)
+        requests.post(f'{url}/cards', params=query)
+
+    def move_card(self, card_id, list_id):
+        print('lists', self.lists)
+        # query = {
+        #     **params,
+        #     'idList': list_id,
+        # }
+        #
+        # requests.put(f'{url}/cards/{card_id}', params=query)
+
+
+

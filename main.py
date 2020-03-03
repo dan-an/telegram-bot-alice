@@ -92,14 +92,14 @@ def main():
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
-            elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408 and \
-                    answer['reply_to_message']['text'] == "Диктуй!":
-                film_name = answer['text'].capitalize()
-                if any(card['name'].find(film_name) for card in board.get_board_cards()):
-                    send_message(chat_id, "Такой уже есть")
-                else:
-                    save_film('Не смотрели', film_name)
-                    send_message(chat_id, "Запомнила!")
+            elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408
+                if answer['reply_to_message']['text'] == "Диктуй!":
+                    film_name = answer['text'].capitalize()
+                    if any(card['name'].find(film_name) for card in board.get_board_cards()):
+                        send_message(chat_id, "Такой уже есть")
+                    else:
+                        save_film('Не смотрели', film_name)
+                        send_message(chat_id, "Запомнила!")
 
             update_id += 1
         sleep(3)
