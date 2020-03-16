@@ -60,20 +60,15 @@ class List:
     def __init__(self, board_lists, list_name):
         self.name = list_name
         self.id = next(list for list in board_lists if list['name'] == self.name)['id']
+        self.cards = self.get_list_cards()
 
     def get_list_id(self):
         return self.id
 
     def get_list_cards(self):
-        query = {
-            'name': label_name,
-            'color': None,
-            'idBoard': self.id,
-        }
-
-        response = requests.post(f'{url}labels/', params={**query, **params})
-        self.get_labels()
-        return response.json()['id']
+        response = requests.get(f'{url}lists/{self.id}/cards', params)
+        print('list cards', response)
+        return response.json()
 
 
 class Card:
@@ -93,7 +88,6 @@ class Card:
         requests.post(f'{url}/cards', params=query)
 
     def move_card(self, card_id, list_id):
-        print('move', card_id, list_id)
         query = {
             **params,
             'idList': list_id,
