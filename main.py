@@ -83,10 +83,13 @@ def move_film(list_name, film_name, chat_id):
     film_exists = any(card['name'].find(film_name) != -1 for card in board.get_board_cards())
 
     if(film_exists and card['id'].find(card_id) == -1 for card in list.cards):
+        print(1)
         card.move_card(card_id, list.id)
     elif film_exists:
+        print(2)
         send_message(chat_id, 'Я уже в курсе)')
     else:
+        print(3)
         send_message(chat_id, 'Слушай, у меня нет такого(')
 
 
