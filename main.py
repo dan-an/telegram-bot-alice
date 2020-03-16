@@ -72,7 +72,7 @@ def save_film(list_name, film_name):
                 if label['name'] == genre:
                     labels_list.append(label['id'])
 
-    card.move_card()
+    # card.move_card()
     card.post_card(list.id, labels_list)
 
 def move_film(list_name, film_name):
@@ -100,9 +100,11 @@ def main():
 
             command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
 
-            if answer['text'].startswith(bot_name) or answer['text'].startswith('/'):
-                if answer['text'].find('запомни фильм') != -1:
+            if command != '':
+                if command.find('запомни фильм') != -1:
                     send_message(chat_id, 'Диктуй!')
+                elif command.find('посмотрели') != -1:
+                    move_film('Миссия серенити')
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
