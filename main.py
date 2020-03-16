@@ -79,7 +79,7 @@ def move_film(film_name, list_name):
     list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card()
     card_id = next(card for card in board.get_board_cards() if card['name'].find(film_name) != -1)['id']
-    list_id = list['id']
+    list_id = list.get_list_id()
 
     card.move_card(card_id, list_id)
 

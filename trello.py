@@ -61,6 +61,9 @@ class List:
         self.name = list_name
         self.id = next(list for list in board_lists if list['name'] == self.name)['id']
 
+    def get_list_id(self):
+        return self.id
+
 
 class Card:
     def __init__(self):
