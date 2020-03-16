@@ -61,7 +61,7 @@ def save_film(list_name, film_name):
     board = trello.Board('Для бота')
     name = f'{film_name} (KP - {movie.rating})'
     list = trello.List(board.get_board_lists(), list_name)
-    card = trello.Card(name, movie.plot)
+    card = trello.Card()
     labels_list = []
 
     for genre in movie.genres:
@@ -73,17 +73,15 @@ def save_film(list_name, film_name):
                     labels_list.append(label['id'])
 
     # card.move_card()
-    card.post_card(list.id, labels_list)
+    card.post_card(name, movie.plot, list.id, labels_list)
 
 def move_film(film_name, list_name):
-    movie = films.Film(film_name)
-    movie.get_movie_content()
     board = trello.Board('Для бота')
-    name = f'{film_name} (KP - {movie.rating})'
     list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card(name, movie.plot)
+    card_id = next(card for card in board.get_board_cards() if card['name'].find(film_name) != -1)['id']
 
-    card.move_card(board.lists)
+    card.move_card(card_id, list)
 
 
 

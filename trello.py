@@ -64,28 +64,27 @@ class List:
 
 class Card:
     def __init__(self, name, description):
-        self.name = name
-        self.description = description
+        self.name = None
+        self.description = None
 
-    def post_card(self, list_id, labels):
+    def post_card(self, name, description, list_id, labels):
         query = {
             **params,
             'idList': list_id,
-            'name': self.name,
-            'desc': self.description,
+            'name': name,
+            'desc': description,
             'idLabels': ','.join(labels)
         }
 
         requests.post(f'{url}/cards', params=query)
 
-    def move_card(self, lists):
-        print('lists', lists)
-        # query = {
-        #     **params,
-        #     'idList': list_id,
-        # }
-        #
-        # requests.put(f'{url}/cards/{card_id}', params=query)
+    def move_card(self, card_id, list_id):
+        query = {
+            **params,
+            'idList': list_id,
+        }
+
+        requests.put(f'{url}/cards/{card_id}', params=query)
 
 
 
