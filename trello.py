@@ -64,6 +64,17 @@ class List:
     def get_list_id(self):
         return self.id
 
+    def get_list_cards(self):
+        query = {
+            'name': label_name,
+            'color': None,
+            'idBoard': self.id,
+        }
+
+        response = requests.post(f'{url}labels/', params={**query, **params})
+        self.get_labels()
+        return response.json()['id']
+
 
 class Card:
     def __init__(self):

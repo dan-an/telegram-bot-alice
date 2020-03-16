@@ -74,14 +74,16 @@ def save_film(list_name, film_name):
 
     card.post_card(name, movie.plot, list.id, labels_list)
 
-def move_film(film_name, list_name):
+def move_film(list_name, film_name, chat_id):
     board = trello.Board('Для бота')
     list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card()
     card_id = next(card for card in board.get_board_cards() if card['name'].find(film_name) != -1)['id']
     list_id = list.get_list_id()
-
-    card.move_card(card_id, list_id)
+    if(card['id'].find(card_id) != -1 for card in list.get_list_cards()):
+        card.move_card(card_id, list_id)
+    else:
+        send_message(chat_id, 'Слушай, у меня нет такого(')
 
 
 
@@ -102,7 +104,7 @@ def main():
                 if command.find('запомни фильм') != -1:
                     send_message(chat_id, 'Диктуй!')
                 elif command.find('посмотрели') != -1:
-                    move_film('Миссия серенити', 'Посмотрели')
+                    send_message(chat_id, 'Давай название!)')
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
@@ -114,6 +116,10 @@ def main():
                     else:
                         save_film('Не смотрели', film_name)
                         send_message(chat_id, "Запомнила!")
+                elif answer['reply_to_message']['text'] == "Давай название!)":
+                    film_name = answer['text'].capitalize()
+                    move_film('Посмотрели', film_name, chat_id)
+
 
             update_id += 1
         sleep(3)
