@@ -111,10 +111,7 @@ def main():
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408:
                 if answer['reply_to_message']['text'] == "Диктуй!":
                     film_name = answer['text'].capitalize()
-                    print('cards', board.get_board_cards())
-                    print('new', film_name)
-                    print('found', 'Миссия серенити (KP - 7.234)'.find(film_name))
-                    if any(card['name'].find(film_name) for card in board.get_board_cards()):
+                    if any(card['name'].find(film_name) != -1 for card in board.get_board_cards()):
                         send_message(chat_id, "Такой уже есть")
                     else:
                         save_film('Не смотрели', film_name)
