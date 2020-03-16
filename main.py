@@ -82,7 +82,7 @@ def move_film(list_name, film_name, chat_id):
     print('cards in main', list.cards)
     film_exists = any(card['name'].find(film_name) != -1 for card in board.get_board_cards())
 
-    if(film_exists and card['id'].find(card_id) == -1 for card in list.cards):
+    if film_exists and all(card['id'].find(card_id) == -1 for card in list.cards):
         print(1)
         card.move_card(card_id, list.id)
     elif film_exists:
