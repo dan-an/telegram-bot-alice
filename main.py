@@ -112,6 +112,8 @@ def main():
                 if answer['reply_to_message']['text'] == "Диктуй!":
                     film_name = answer['text'].capitalize()
                     print('cards', board.get_board_cards())
+                    print('new', film_name)
+                    print('found', 'Миссия серенити (KP - 7.234)'.find(film_name))
                     if any(card['name'].find(film_name) for card in board.get_board_cards()):
                         send_message(chat_id, "Такой уже есть")
                     else:
