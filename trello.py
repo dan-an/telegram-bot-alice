@@ -62,12 +62,8 @@ class List:
         self.id = next(list for list in board_lists if list['name'] == self.name)['id']
         self.cards = self.get_list_cards()
 
-    def get_list_id(self):
-        return self.id
-
     def get_list_cards(self):
         response = requests.get(f'{url}lists/{self.id}/cards', params)
-        print('list cards', response)
         return response.json()
 
 

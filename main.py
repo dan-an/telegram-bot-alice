@@ -79,10 +79,13 @@ def move_film(list_name, film_name, chat_id):
     list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card()
     card_id = next(card for card in board.get_board_cards() if card['name'].find(film_name) != -1)['id']
-    list_id = list.get_list_id()
     print('cards in main', list.cards)
-    if(card['id'].find(card_id) != -1 for card in list.get_list_cards()):
-        card.move_card(card_id, list_id)
+    film_exists = any(card['name'].find(film_name) != -1 for card in board.get_board_cards())
+
+    if(film_exists and card['id'].find(card_id) == -1 for card in list.cards):
+        card.move_card(card_id, list.id)
+    elif film_exists:
+        send_message(chat_id, 'Я уже в курсе)')
     else:
         send_message(chat_id, 'Слушай, у меня нет такого(')
 
