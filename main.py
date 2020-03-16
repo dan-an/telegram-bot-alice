@@ -75,7 +75,7 @@ def save_film(list_name, film_name):
     # card.move_card()
     card.post_card(list.id, labels_list)
 
-def move_film(list_name, film_name):
+def move_film(film_name):
     movie = films.Film(film_name)
     movie.get_movie_content()
     board = trello.Board('Для бота')
