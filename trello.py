@@ -78,8 +78,8 @@ class Card:
 
         requests.post(f'{url}/cards', params=query)
 
-    def move_card(self, card_id, list_id):
-        print('lists', self.lists)
+    def move_card(self, lists):
+        print('lists', lists)
         # query = {
         #     **params,
         #     'idList': list_id,

@@ -72,7 +72,19 @@ def save_film(list_name, film_name):
                 if label['name'] == genre:
                     labels_list.append(label['id'])
 
+    card.move_card()
     card.post_card(list.id, labels_list)
+
+def move_film(list_name, film_name):
+    movie = films.Film(film_name)
+    movie.get_movie_content()
+    board = trello.Board('Для бота')
+    name = f'{film_name} (KP - {movie.rating})'
+    # list = trello.List(board.get_board_lists(), list_name)
+    card = trello.Card(name, movie.plot)
+
+    card.move_card(board.lists)
+
 
 
 def main():
@@ -85,6 +97,8 @@ def main():
             answer = get_message(last_update(get_updates_json(url)))
 
             chat_id = answer['chat_id']
+
+            command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
 
             if answer['text'].startswith(bot_name) or answer['text'].startswith('/'):
                 if answer['text'].find('запомни фильм') != -1:
