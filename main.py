@@ -46,11 +46,15 @@ def get_message(update):
     return message
 
 
-def send_message(chat, text):
+def send_message(chat, text, keyboard={}):
     params = {
         'chat_id': chat,
-        'text': text
+        'text': text,
     }
+
+    if 'inline_keyboard' in keyboard:
+        params['reply_markup'] = test_keyboard
+
     response = requests.post(url + 'sendMessage', data=params)
     return response
 
@@ -74,6 +78,7 @@ def save_film(list_name, film_name):
 
     card.post_card(name, movie.plot, list.id, labels_list)
 
+
 def move_film(list_name, film_name, chat_id):
     board = trello.Board('Для бота')
     list = trello.List(board.get_board_lists(), list_name)
@@ -89,6 +94,10 @@ def move_film(list_name, film_name, chat_id):
     else:
         send_message(chat_id, 'Слушай, у меня нет такого(')
 
+
+def send_test(chat_id):
+    test_keyboard = {'inline_keyboard': [[{'text': '1'}], [{'text': '1'}], [{'text': '1'}]]}
+    send_message(chat_id, 'тест клавиатуры', test_keyboard)
 
 
 def main():
@@ -109,6 +118,8 @@ def main():
                     send_message(chat_id, 'Диктуй!')
                 elif command.find('посмотрели') != -1:
                     send_message(chat_id, 'Давай название!)')
+                elif command.find('тест') != -1:
+                    send_test(chat_id)
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
@@ -123,7 +134,6 @@ def main():
                 elif answer['reply_to_message']['text'] == "Давай название!)":
                     film_name = answer['text'].capitalize()
                     move_film('Посмотрели', film_name, chat_id)
-
 
             update_id += 1
         sleep(3)
