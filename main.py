@@ -72,7 +72,6 @@ def save_film(list_name, film_name):
                 if label['name'] == genre:
                     labels_list.append(label['id'])
 
-    # card.move_card()
     card.post_card(name, movie.plot, list.id, labels_list)
 
 def move_film(film_name, list_name):
