@@ -53,7 +53,7 @@ def send_message(chat, text, keyboard={}):
     }
 
     if 'inline_keyboard' in keyboard:
-        params['reply_markup'] = test_keyboard
+        params['reply_markup'] = keyboard
 
     response = requests.post(url + 'sendMessage', data=params)
     return response
