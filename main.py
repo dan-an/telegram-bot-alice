@@ -86,7 +86,7 @@ def save_film(list_name, film_name, chat_id):
     else:
         formatted_list = \
             json.dumps(
-                {'inline_keyboard': map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list.movies)})
+                {'inline_keyboard': map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list)})
         send_message(chat_id, 'Помоги выбрать', formatted_list)
 
 
