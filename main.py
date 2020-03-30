@@ -84,10 +84,9 @@ def save_film(list_name, film_name, chat_id):
 
         card.post_card(name, movie.plot, list.id, labels_list)
     else:
-        formatted_list = \
-            json.dumps(
-                {'inline_keyboard': map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list)})
-        send_message(chat_id, 'Помоги выбрать', formatted_list)
+        formatted_list = map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list)
+
+        send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
 
 
 def move_film(list_name, film_name, chat_id):
