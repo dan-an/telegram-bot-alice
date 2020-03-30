@@ -34,6 +34,7 @@ def last_update(data):
 
 
 def get_message(update):
+    print(update)
     chat_id = update['message']['chat']['id']
     message_text = update['message']['text'].lower()
     reply = update['message'].get('reply_to_message', None)
