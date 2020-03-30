@@ -96,8 +96,10 @@ def move_film(list_name, film_name, chat_id):
 
 
 def send_test(chat_id):
-    test_keyboard = {'inline_keyboard': [[{'text': '1'}], [{'text': '1'}], [{'text': '1'}]]}
-    send_message(chat_id, 'тест клавиатуры', test_keyboard)
+    # test_keyboard = {'inline_keyboard': [[{'text': '1'}], [{'text': '1'}], [{'text': '1'}]]}
+    # send_message(chat_id, 'тест клавиатуры', test_keyboard)
+    print('send test')
+    send_message(chat_id, 'тест клавиатуры')
 
 
 def main():
