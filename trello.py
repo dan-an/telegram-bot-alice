@@ -90,6 +90,3 @@ class Card:
         }
 
         requests.put(f'{url}/cards/{card_id}', params=query)
-
-
-
