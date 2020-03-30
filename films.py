@@ -1,10 +1,14 @@
 from kinopoisk.movie import Movie
 
 
+def format_movies(movies_list):
+    return [f'{name} {year}' for name, year in zip(movies_list[0::2], movies_list[1::2])]
+
+
 class MovieList:
     def __init__(self, name):
         self.name = name
-        self.movies = Movie.objects.search(self.name)
+        self.movies = format_movies(Movie.objects.search(self.name))
 
 
 class Film:
