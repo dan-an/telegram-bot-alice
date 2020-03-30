@@ -48,6 +48,8 @@ def get_message(update):
     if 'callback_query' in update:
         message['callback_data'] = update.get('callback_data').get('data')
 
+    print('message', message)
+
     return message
 
 
