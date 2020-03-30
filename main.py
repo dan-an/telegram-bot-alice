@@ -70,7 +70,7 @@ def save_film(list_name, film_name, chat_id):
         movie.get_movie_content()
         board = trello.Board('Для бота')
         name = f'{film_name} (KP - {movie.rating})'
-        list = trello.List(board.get_board_lists(), list_name)
+        board_list = trello.List(board.get_board_lists(), list_name)
         card = trello.Card()
         labels_list = []
 
@@ -82,7 +82,7 @@ def save_film(list_name, film_name, chat_id):
                     if label['name'] == genre:
                         labels_list.append(label['id'])
 
-        card.post_card(name, movie.plot, list.id, labels_list)
+        card.post_card(name, movie.plot, board_list.id, labels_list)
     else:
         formatted_list = list(map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list))
 
