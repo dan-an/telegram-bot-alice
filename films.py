@@ -8,7 +8,7 @@ def format_movies(movies_list):
 class MovieList:
     def __init__(self, name):
         self.name = name
-        self.movies = format_movies(Movie.objects.search(self.name))
+        self.movies = Movie.objects.search(self.name)
 
 
 class Film:

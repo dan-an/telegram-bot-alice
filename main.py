@@ -66,7 +66,7 @@ def save_film(list_name, film_name):
     movie = films.Film(film_name)
     movie.get_movie_content()
     test_list = films.MovieList(film_name)
-    print(test_list.movies)
+    print(test_list.movies[0])
     board = trello.Board('Для бота')
     name = f'{film_name} (KP - {movie.rating})'
     list = trello.List(board.get_board_lists(), list_name)
