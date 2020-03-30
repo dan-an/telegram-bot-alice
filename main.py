@@ -34,16 +34,19 @@ def last_update(data):
 
 
 def get_message(update):
-    print(update)
-    chat_id = update['message']['chat']['id']
-    message_text = update['message']['text'].lower()
-    reply = update['message'].get('reply_to_message', None)
+    message_data = update.get('callback_query').get('message') if 'callback_query' in update else update.get('message')
+    chat_id = message_data['chat']['id']
+    message_text = message_data['text'].lower()
+    reply = message_data.get('reply_to_message', None)
 
     message = {
         'chat_id': chat_id,
         'text': message_text,
         'reply_to_message': reply
     }
+
+    if 'callback_query' in update:
+        message['callback_data'] = update.get('callback_data').get('data')
 
     return message
 
@@ -64,7 +67,9 @@ def send_message(chat, text, keyboard={}):
 
 
 def save_film(list_name, film_name, chat_id):
+    print('film_name', film_name)
     movie_list = films.MovieList(film_name).movies
+    print('movie_list', movie_list)
 
     if len(movie_list) == 1:
         movie = films.Film(film_name)
@@ -110,7 +115,6 @@ def move_film(list_name, film_name, chat_id):
 
 def send_test(chat_id):
     test_keyboard = json.dumps({"inline_keyboard": [[{"text": "1", "url": "https://yandex.ru/"}]]})
-    print('send test')
     send_message(chat_id, 'тест клавиатуры', test_keyboard)
 
 
@@ -124,6 +128,7 @@ def main():
             answer = get_message(last_update(get_updates_json(url)))
 
             chat_id = answer['chat_id']
+            print('answer', answer)
 
             command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
 
@@ -137,6 +142,8 @@ def main():
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
+            elif 'callback_data' in answer:
+                save_film('Не смотрели', answer.get('callback_data'), chat_id)
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408:
                 if answer['reply_to_message']['text'] == "Диктуй!":
                     film_name = answer['text'].capitalize()
@@ -144,7 +151,6 @@ def main():
                         send_message(chat_id, "Такой уже есть")
                     else:
                         save_film('Не смотрели', film_name, chat_id)
-                        send_message(chat_id, "Запомнила!")
                 elif answer['reply_to_message']['text'] == "Давай название!)":
                     film_name = answer['text'].capitalize()
                     move_film('Посмотрели', film_name, chat_id)
