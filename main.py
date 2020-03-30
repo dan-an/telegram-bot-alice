@@ -99,9 +99,7 @@ def move_film(list_name, film_name, chat_id):
 
 
 def send_test(chat_id):
-    test_keyboard = {'inline_keyboard': [[{'text': '1', 'url': 'https://yandex.ru/'}],
-                                         [{'text': '1', 'url': 'https://yandex.ru/'}],
-                                         [{'text': '1', 'url': 'https://yandex.ru/'}]]
+    test_keyboard = {"inline_keyboard": [[{"text": "1", "url": "https://yandex.ru/"}]]
                      }
     print('send test')
     send_message(chat_id, 'тест клавиатуры', test_keyboard)
