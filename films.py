@@ -6,9 +6,8 @@ def format_movies(movies_list):
 
 
 class MovieList:
-    def __init__(self, name):
-        self.name = name
-        self.movies = Movie.objects.search(self.name)
+    def __init__(self, search_name):
+        self.movies = Movie.objects.search(search_name)
 
 
 class Film:

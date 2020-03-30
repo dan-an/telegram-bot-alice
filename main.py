@@ -62,26 +62,32 @@ def send_message(chat, text, keyboard={}):
     return response
 
 
-def save_film(list_name, film_name):
-    movie = films.Film(film_name)
-    movie.get_movie_content()
-    test_list = films.MovieList(film_name)
-    print(test_list.movies[0])
-    board = trello.Board('Для бота')
-    name = f'{film_name} (KP - {movie.rating})'
-    list = trello.List(board.get_board_lists(), list_name)
-    card = trello.Card()
-    labels_list = []
+def save_film(list_name, film_name, chat_id):
+    movie_list = films.MovieList(film_name)
 
-    for genre in movie.genres:
-        if not any(label['name'] == genre for label in board.labels):
-            labels_list.append(board.create_label(genre))
-        else:
-            for label in board.labels:
-                if label['name'] == genre:
-                    labels_list.append(label['id'])
+    if len(movie_list) == 1:
+        movie = films.Film(film_name)
+        movie.get_movie_content()
+        board = trello.Board('Для бота')
+        name = f'{film_name} (KP - {movie.rating})'
+        list = trello.List(board.get_board_lists(), list_name)
+        card = trello.Card()
+        labels_list = []
 
-    card.post_card(name, movie.plot, list.id, labels_list)
+        for genre in movie.genres:
+            if not any(label['name'] == genre for label in board.labels):
+                labels_list.append(board.create_label(genre))
+            else:
+                for label in board.labels:
+                    if label['name'] == genre:
+                        labels_list.append(label['id'])
+
+        card.post_card(name, movie.plot, list.id, labels_list)
+    else:
+        formatted_list = \
+            json.dumps(
+                {'inline_keyboard': map(lambda m: [{'text': m, 'url': 'https://yandex.ru/'}], movie_list.movies)})
+        send_message(chat_id, 'Помоги выбрать', formatted_list)
 
 
 def move_film(list_name, film_name, chat_id):
@@ -135,7 +141,7 @@ def main():
                     if any(card['name'].find(film_name) != -1 for card in board.get_board_cards()):
                         send_message(chat_id, "Такой уже есть")
                     else:
-                        save_film('Не смотрели', film_name)
+                        save_film('Не смотрели', film_name, chat_id)
                         send_message(chat_id, "Запомнила!")
                 elif answer['reply_to_message']['text'] == "Давай название!)":
                     film_name = answer['text'].capitalize()
