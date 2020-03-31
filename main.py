@@ -136,7 +136,7 @@ def main():
 
             if command != '':
                 if command.find('запомни фильм') != -1:
-                    send_message(chat_id, 'Диктуй!', reply_markup={'force_reply': True})
+                    send_message(chat_id, 'Диктуй!', json.dumps({'force_reply': True}))
                 elif command.find('посмотрели') != -1:
                     send_message(chat_id, 'Давай название!)')
                 elif command.find('тест') != -1:
