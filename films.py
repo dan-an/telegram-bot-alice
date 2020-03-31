@@ -1,10 +1,5 @@
 from kinopoisk.movie import Movie
 
-
-def format_movies(movies_list):
-    return [f'{name} {year}' for name, year in zip(movies_list[0::2], movies_list[1::2])]
-
-
 class MovieList:
     def __init__(self, search_name):
         self.movies = Movie.objects.search(search_name)
@@ -18,10 +13,6 @@ class Film:
         self.genres = None
         self.rating_kp = None
         self.rating_imdb = None
-
-    def search_film(self):
-        movie_list = Movie.objects.search(self.name)
-        return movie_list
 
     def get_movie_content(self):
         movie = Movie(self.id)
