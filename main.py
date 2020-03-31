@@ -46,7 +46,7 @@ def get_message(update):
     }
 
     if 'callback_query' in update:
-        message['callback_data'] = update.get('callback_data').get('data')
+        message['callback_data'] = update.get('callback_query').get('data')
 
     print('message', message)
 
