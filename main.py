@@ -51,14 +51,14 @@ def get_message(update):
     return message
 
 
-def send_message(chat, text, keyboard={}):
+def send_message(chat, text, reply_markup=None):
     params = {
         'chat_id': chat,
         'text': text,
     }
 
-    if 'inline_keyboard' in keyboard:
-        params['reply_markup'] = keyboard
+    if 'inline_keyboard' in reply_markup:
+        params['reply_markup'] = reply_markup
 
     response = requests.post(url + 'sendMessage', data=params)
     return response
@@ -136,7 +136,7 @@ def main():
 
             if command != '':
                 if command.find('запомни фильм') != -1:
-                    send_message(chat_id, 'Диктуй!')
+                    send_message(chat_id, 'Диктуй!', reply_markup={'force_reply': True})
                 elif command.find('посмотрели') != -1:
                     send_message(chat_id, 'Давай название!)')
                 elif command.find('тест') != -1:
