@@ -11,9 +11,9 @@ class MovieList:
 
 
 class Film:
-    def __init__(self, name):
-        self.name = name
-        self.id = Movie.objects.search(self.name)[0].id
+    def __init__(self, film_id):
+        self.id = film_id
+        self.title = None
         self.plot = None
         self.genres = None
         self.rating = None
@@ -29,4 +29,5 @@ class Film:
         self.plot = movie.plot
         self.genres = movie.genres
         self.rating = movie.rating
-        # self.imdb = movie.imdb
+        self.title = movie.title
+        self.imdb = movie.imdb_rating

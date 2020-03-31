@@ -68,15 +68,36 @@ def send_message(chat, text, keyboard={}):
     return response
 
 
-def save_film(list_name, film_name, chat_id):
+def search_film(chat_id, search_query=None, movie_id=None):
+    movie = None
+
+    if search_query:
+        movie_list = films.MovieList(search_query).movies
+
+        if len(movie_list) == 1:
+            movie = films.Film(movie_list[0].id)
+        else:
+            formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m.id}'}], movie_list))
+            print('formatted_list', formatted_list)
+
+            send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
+
+    elif movie_id:
+        movie = films.Film(movie_id)
+
+    if movie:
+        movie.get_movie_content()
+
+    print(search_query, movie_id, movie)
+    return movie
+
+
+def save_film(list_name, movie_data, chat_id):
     print('film_name', film_name)
-    movie_list = films.MovieList(film_name).movies
+    movie_list = films.search_movie(film_name)
     print('movie_id', movie_list[0].id)
 
     if len(movie_list) == 1:
-        print('one')
-        movie = films.Film(film_name)
-        movie.get_movie_content()
         board = trello.Board('Для бота')
         name = f'{film_name} (KP - {movie.rating})'
         board_list = trello.List(board.get_board_lists(), list_name)
@@ -94,7 +115,7 @@ def save_film(list_name, film_name, chat_id):
         card.post_card(name, movie.plot, board_list.id, labels_list)
     else:
         print('many')
-        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m}'}], movie_list))
+        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m.id}'}], movie_list))
         print('formatted_list', formatted_list)
 
         send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
@@ -148,7 +169,8 @@ def main():
                     send_message(chat_id, 'Ты написал: "' + text + '"')
             elif 'callback_data' in answer:
                 print('callback')
-                save_film('Не смотрели', answer.get('callback_data'), chat_id)
+                movie_data = search_film(chat_id, movie_id=answer.get('callback_data'))
+                save_film('Не смотрели', movie_data, chat_id)
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408:
                 print('reply')
                 if answer['reply_to_message']['text'] == "Диктуй!":
@@ -156,7 +178,9 @@ def main():
                     if any(card['name'].find(film_name) != -1 for card in board.get_board_cards()):
                         send_message(chat_id, "Такой уже есть")
                     else:
-                        save_film('Не смотрели', film_name, chat_id)
+                        movie_data = search_film(chat_id, search_query=film_name)
+                        if movie_data:
+                            save_film('Не смотрели', movie_data, chat_id)
                 elif answer['reply_to_message']['text'] == "Давай название!)":
                     film_name = answer['text'].capitalize()
                     move_film('Посмотрели', film_name, chat_id)
