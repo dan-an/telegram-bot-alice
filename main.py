@@ -71,7 +71,7 @@ def send_message(chat, text, keyboard={}):
 def save_film(list_name, film_name, chat_id):
     print('film_name', film_name)
     movie_list = films.MovieList(film_name).movies
-    # print('movie_list', movie_list)
+    print('movie_id', movie_list[0].id)
 
     if len(movie_list) == 1:
         print('one')
