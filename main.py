@@ -94,7 +94,8 @@ def save_film(list_name, film_name, chat_id):
         card.post_card(name, movie.plot, board_list.id, labels_list)
     else:
         print('many')
-        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'test'}], movie_list))
+        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m}'}], movie_list))
+        print('formatted_list', formatted_list)
 
         send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
 
