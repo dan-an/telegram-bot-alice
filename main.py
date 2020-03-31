@@ -60,10 +60,10 @@ def send_message(chat, text, keyboard={}):
     }
 
     if 'inline_keyboard' in keyboard:
-        print('inline keyboard')
+        # print('inline keyboard')
         params['reply_markup'] = keyboard
 
-    print('params', params)
+    # print('params', params)
     response = requests.post(url + 'sendMessage', data=params)
     return response
 
@@ -71,7 +71,7 @@ def send_message(chat, text, keyboard={}):
 def save_film(list_name, film_name, chat_id):
     print('film_name', film_name)
     movie_list = films.MovieList(film_name).movies
-    print('movie_list', movie_list)
+    # print('movie_list', movie_list)
 
     if len(movie_list) == 1:
         movie = films.Film(film_name)
