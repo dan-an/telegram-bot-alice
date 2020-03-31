@@ -4,7 +4,6 @@ import json
 from time import sleep
 import trello
 import films
-import telegram
 
 telegram_token = misc.token['telegram']
 
@@ -57,7 +56,7 @@ def send_message(chat, text, reply_markup=None):
         'text': text,
     }
 
-    if 'inline_keyboard' in reply_markup:
+    if reply_markup is not None:
         params['reply_markup'] = reply_markup
 
     response = requests.post(url + 'sendMessage', data=params)
@@ -139,8 +138,6 @@ def main():
                     send_message(chat_id, 'Диктуй!', json.dumps({'force_reply': True}))
                 elif command.find('посмотрели') != -1:
                     send_message(chat_id, 'Давай название!)')
-                elif command.find('тест') != -1:
-                    send_test(chat_id)
                 else:
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
