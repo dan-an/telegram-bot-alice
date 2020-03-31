@@ -88,27 +88,26 @@ def search_film(chat_id, search_query=None, movie_id=None):
     if movie:
         movie.get_movie_content()
 
-    print(search_query, movie_id, movie)
     return movie
 
 
 def save_film(list_name, movie_data, chat_id):
     print('movie_data', movie_data)
-    # board = trello.Board('Для бота')
-    # name = f'{film_name} (KP - {movie.rating})'
-    # board_list = trello.List(board.get_board_lists(), list_name)
-    # card = trello.Card()
-    # labels_list = []
-    #
-    # for genre in movie.genres:
-    #     if not any(label['name'] == genre for label in board.labels):
-    #         labels_list.append(board.create_label(genre))
-    #     else:
-    #         for label in board.labels:
-    #             if label['name'] == genre:
-    #                 labels_list.append(label['id'])
-    #
-    # card.post_card(name, movie.plot, board_list.id, labels_list)
+    board = trello.Board('Для бота')
+    name = f'{movie_data.title}, {movie_data.year} (KP - {movie_data.rating_kp}, IMDB - {movie_data.imdb_rating})'
+    board_list = trello.List(board.get_board_lists(), list_name)
+    card = trello.Card()
+    labels_list = []
+
+    for genre in movie_data.genres:
+        if not any(label['name'] == genre for label in board.labels):
+            labels_list.append(board.create_label(genre))
+        else:
+            for label in board.labels:
+                if label['name'] == genre:
+                    labels_list.append(label['id'])
+
+    card.post_card(name, movie_data.plot, board_list.id, labels_list)
 
 
 def move_film(list_name, film_name, chat_id):

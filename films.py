@@ -16,8 +16,8 @@ class Film:
         self.title = None
         self.plot = None
         self.genres = None
-        self.rating = None
-        self.imdb = None
+        self.rating_kp = None
+        self.rating_imdb = None
 
     def search_film(self):
         movie_list = Movie.objects.search(self.name)
@@ -28,6 +28,7 @@ class Film:
         movie.get_content('main_page')
         self.plot = movie.plot
         self.genres = movie.genres
-        self.rating = movie.rating
+        self.rating_kp = movie.rating
         self.title = movie.title
-        self.imdb = movie.imdb_rating
+        self.rating_imdb = movie.imdb_rating
+        self.year = movie.year
