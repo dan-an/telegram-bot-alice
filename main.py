@@ -92,9 +92,7 @@ def save_film(list_name, film_name, chat_id):
 
         card.post_card(name, movie.plot, board_list.id, labels_list)
     else:
-        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': 'https://yandex.ru/'}], movie_list))
-
-        print(formatted_list)
+        formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m}'}], movie_list))
 
         send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
 
@@ -130,11 +128,12 @@ def main():
             answer = get_message(last_update(get_updates_json(url)))
 
             chat_id = answer['chat_id']
-            print('answer', answer)
+            # print('answer', answer)
 
             command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
 
             if command != '':
+                print('command')
                 if command.find('запомни фильм') != -1:
                     send_message(chat_id, 'Диктуй!')
                 elif command.find('посмотрели') != -1:
@@ -145,8 +144,10 @@ def main():
                     text = answer['text']
                     send_message(chat_id, 'Ты написал: "' + text + '"')
             elif 'callback_data' in answer:
+                print('callback')
                 save_film('Не смотрели', answer.get('callback_data'), chat_id)
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408:
+                print('reply')
                 if answer['reply_to_message']['text'] == "Диктуй!":
                     film_name = answer['text'].capitalize()
                     if any(card['name'].find(film_name) != -1 for card in board.get_board_cards()):
