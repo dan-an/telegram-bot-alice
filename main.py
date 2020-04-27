@@ -87,7 +87,8 @@ def search_film(chat_id, search_query=None, movie_id=None):
 
 def save_film(list_name, movie_data, chat_id):
     board = trello.Board('Для бота')
-    name = f'{movie_data.title}, {movie_data.year} (KP - {movie_data.rating_kp}, IMDB - {movie_data.rating_imdb})'
+    ratings = ', '.join([f'{key} {value}' for (key, value) in movie_data.ratings.items() if value is not None])
+    name = f'{movie_data.title}, {movie_data.year} {({ratings}) if len(ratings) != 0 else ""}'
     board_list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card()
     labels_list = []
