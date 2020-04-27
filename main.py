@@ -76,7 +76,8 @@ def search_film(chat_id, search_query=None, movie_id=None):
             movie = films.Film(movie_list[0].id)
         else:
             formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m.id}'}], movie_list))
-            send_message(chat_id, random.choice(misc.bot_replies.get('ask_help')), json.dumps({'inline_keyboard': formatted_list}))
+            send_message(chat_id, f"{random.choice(misc.bot_replies.get('ask_help'))}:",
+                         json.dumps({'inline_keyboard': formatted_list}))
 
     elif movie_id:
         movie = films.Film(movie_id)
@@ -144,7 +145,7 @@ def main():
                 if any(request_str in command for request_str in misc.user_requests.get('save_requests')):
                     send_message(chat_id, 'Диктуй!', json.dumps({'force_reply': True}))
                 elif any(request_str in command for request_str in misc.user_requests.get('watched_requests')):
-                    send_message(chat_id, 'Давай название!)')
+                    send_message(chat_id, 'Давай название!)', json.dumps({'force_reply': True}))
                 else:
                     send_message(chat_id, f'Ты написал: {answer["text"]}')
             elif 'callback_data' in answer:
