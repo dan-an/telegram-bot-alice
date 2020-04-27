@@ -29,7 +29,6 @@ def get_updates_json(request):
 
 def last_update(data):
     results = data['result']
-    print(results)
     return results[-1] if len(results) != 0 else None
 
 
