@@ -68,7 +68,7 @@ def search_film(chat_id, search_query=None, movie_id=None):
 
     if search_query:
         movie_list = films.MovieList(search_query).movies
-        print("movie_list", movie_list)
+        print("movie_list ", movie_list)
 
         if len(movie_list) == 1:
             movie = films.Film(movie_list[0].id)
