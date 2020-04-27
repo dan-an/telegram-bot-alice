@@ -15,3 +15,8 @@ user_requests = {
     'save_requests': ['запомни фильм', 'save'],
     'watched_requests': ['посмотрели', 'watched']
 }
+
+bot_replies = {
+    'nothing_found': ['Я такого не нашла('],
+    'ask_help': ['Помоги выбрать', 'Не могу определиться', 'Всего так много']
+}

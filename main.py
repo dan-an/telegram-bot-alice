@@ -4,6 +4,7 @@ import json
 from time import sleep
 import trello
 import films
+import random
 
 telegram_token = misc.token['telegram']
 
@@ -68,14 +69,14 @@ def search_film(chat_id, search_query=None, movie_id=None):
 
     if search_query:
         movie_list = films.MovieList(search_query).movies
-        print("movie_list ", movie_list)
 
-        if len(movie_list) == 1:
+        if len(movie_list) == 0:
+            send_message(chat_id, random.choice(misc.bot_replies.get('nothing_found')))
+        elif len(movie_list) == 1:
             movie = films.Film(movie_list[0].id)
         else:
             formatted_list = list(map(lambda m: [{'text': f'{m}', 'callback_data': f'{m.id}'}], movie_list))
-
-            send_message(chat_id, 'Помоги выбрать', json.dumps({'inline_keyboard': formatted_list}))
+            send_message(chat_id, random.choice(misc.bot_replies.get('ask_help')), json.dumps({'inline_keyboard': formatted_list}))
 
     elif movie_id:
         movie = films.Film(movie_id)
