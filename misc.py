@@ -10,3 +10,8 @@ api_key = {
 bot_name = {
     'telegram': '@alicedanbot'
 }
+
+user_requests = {
+    'save_requests': ['запомни фильм', 'save'],
+    'watched_requests': ['посмотрели', 'watched']
+}

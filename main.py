@@ -139,9 +139,9 @@ def main():
             command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
 
             if command != '':
-                if command.find('запомни фильм') != -1:
+                if command[1::] in misc.user_requests.get('save_requests'):
                     send_message(chat_id, 'Диктуй!', json.dumps({'force_reply': True}))
-                elif command.find('посмотрели') != -1:
+                elif command[1::] in misc.user_requests.get('watched_requests'):
                     send_message(chat_id, 'Давай название!)')
                 else:
                     text = answer['text']
