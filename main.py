@@ -136,16 +136,15 @@ def main():
 
             chat_id = answer['chat_id']
 
-            command = answer['text'] if answer['text'].startswith(bot_name) or answer['text'].startswith('/') else ''
+            command = answer['text'] if bot_name in answer['text'] or answer['text'].startswith('/') else ''
 
             if command != '':
                 if any(request_str in command for request_str in misc.user_requests.get('save_requests')):
                     send_message(chat_id, 'Диктуй!', json.dumps({'force_reply': True}))
-                elif command[1::] in misc.user_requests.get('watched_requests'):
+                elif any(request_str in command for request_str in misc.user_requests.get('watched_requests')):
                     send_message(chat_id, 'Давай название!)')
                 else:
-                    text = answer['text']
-                    send_message(chat_id, 'Ты написал: "' + text + '"')
+                    send_message(chat_id, f'Ты написал: {answer["text"]}')
             elif 'callback_data' in answer:
                 movie_data = search_film(chat_id, movie_id=answer.get('callback_data'))
                 save_film('Не смотрели', movie_data, chat_id)
