@@ -82,7 +82,7 @@ def search_film(chat_id, search_query=None, movie_id=None):
     elif movie_id:
         movie = films.Film(movie_id)
 
-    if movie:
+    if movie is not None:
         movie.get_movie_content()
 
     return movie
