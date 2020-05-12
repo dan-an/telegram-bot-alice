@@ -130,7 +130,6 @@ def move_film(list_name, film_name, chat_id):
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
-    print(misc.boards.get('films')['name'])
     board = trello.Board(misc.boards.get('films')['name'])
 
     while True:
