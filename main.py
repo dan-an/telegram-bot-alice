@@ -89,7 +89,7 @@ def search_film(chat_id, search_query=None, movie_id=None):
 
 
 def save_film(list_name, movie_data, chat_id):
-    board = trello.Board('Для бота')
+    board = trello.Board(misc.boards.get('films')['name'])
     ratings = ', '.join([f'{key} {value}' for (key, value) in movie_data.ratings.items() if value is not None])
     name = f'{movie_data.title}, {movie_data.year}'
 
@@ -113,7 +113,7 @@ def save_film(list_name, movie_data, chat_id):
 
 
 def move_film(list_name, film_name, chat_id):
-    board = trello.Board('Для бота')
+    board = trello.Board(misc.boards.get('films')['name'])
     list = trello.List(board.get_board_lists(), list_name)
     card = trello.Card()
     card_id = next(card for card in board.get_board_cards() if card['name'].find(film_name) != -1)['id']
@@ -130,7 +130,7 @@ def move_film(list_name, film_name, chat_id):
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
-    board = trello.Board('Для бота')
+    board = trello.Board(misc.boards.get('films')['name'])
 
     while True:
         if update_id == last_update(get_updates_json(url))['update_id']:
@@ -150,7 +150,7 @@ def main():
                     send_message(chat_id, f'Ты написал: {answer["text"]}')
             elif 'callback_data' in answer:
                 movie_data = search_film(chat_id, movie_id=answer.get('callback_data'))
-                save_film('Не смотрели', movie_data, chat_id)
+                save_film(misc.boards.get('films')['lists'].get('unwatched'), movie_data, chat_id)
             elif answer['reply_to_message'] and answer['reply_to_message']['from']['id'] == 550506408:
                 if answer['reply_to_message']['text'] == "Диктуй!":
                     film_name = answer['text'].capitalize()
@@ -159,10 +159,10 @@ def main():
                     else:
                         movie_data = search_film(chat_id, search_query=film_name)
                         if movie_data:
-                            save_film('Не смотрели', movie_data, chat_id)
+                            save_film(misc.boards.get('films')['lists'].get('unwatched'), movie_data, chat_id)
                 elif answer['reply_to_message']['text'] == "Давай название!)":
                     film_name = answer['text'].capitalize()
-                    move_film('Посмотрели', film_name, chat_id)
+                    move_film(misc.boards.get('films')['lists'].get('watched'), film_name, chat_id)
 
             update_id += 1
         sleep(3)
